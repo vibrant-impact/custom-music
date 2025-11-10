@@ -1,4 +1,4 @@
-/* --- Global Reset & Base Styles --- */
+
 * {
   margin: 0;
   padding: 0;
@@ -57,6 +57,39 @@ h4 {
 p {
   font-size: 1.1em;
   line-height: 1.6;
+}
+
+/* --- Lightbox --- */
+#videoLightbox {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden; 
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.9); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; 
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+#videoLightbox.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+#lightboxVideoPlayer {
+    width: 80vw;
+    max-width: 900px;
+    height: 45vw;
+    max-height: 506.25px; 
+    background: black;
+    border: 3px solid white; 
+    border-radius: 12px;  
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); 
 }
 
 /* --- Main Grid Layout --- */
@@ -226,8 +259,8 @@ p {
   color: #ffffff; 
   font-weight: 900;
   text-shadow: 
-    0 0 10px rgba(241, 91, 181, 0.8), /* Soft Pink Glow */
-    0 0 20px rgba(155, 93, 229, 0.6); /* Soft Purple Glow */
+    0 0 10px rgba(241, 91, 181, 0.8), 
+    0 0 20px rgba(155, 93, 229, 0.6); 
 }
 
 .heroContent p {
@@ -462,23 +495,49 @@ p {
   transform: translateY(0);
 }
 
-.videoEmbed {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%; 
-  border-radius: 0.5rem;
-  overflow: hidden; 
-  background: #000000;
-  margin-bottom: 0.75rem;
+/* --- Video Card Thumbnail Styling --- */
+.videoPreviewBox {
+    position: relative; 
+    overflow: hidden; 
+    border-radius: 8px; 
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    width: 100%; 
 }
 
-.videoEmbed iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
+.videoPreviewBox .videoThumbnail { 
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease-in-out; 
+}
+
+.videoPreviewBox:hover .videoThumbnail {
+    transform: scale(1.05); 
+}
+
+.playOverlay {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%; 
+    font-size: 3rem; 
+    padding: 0.5rem 1.1rem 0.5rem 1.3rem;
+    line-height: 1;
+    opacity: 0.9;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none; 
+}
+
+.lightbox:hover .thumbnail {
+    transform: scale(1.05); 
+}
+
+.lightbox:hover .playOverlay {
+    opacity: 1; 
 }
 
 /* --- Hamburger Menu --- */
@@ -625,6 +684,12 @@ p {
   .heroContent p {
     font-size: 1.1rem;
   }
+
+  #lightboxVideoPlayer {
+        width: 90vw;
+        height: 50.625vw; 
+    }
+
 }
 
 @media (max-width: 700px) {
