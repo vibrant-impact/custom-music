@@ -32,21 +32,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function showVideo(e, vimeoUrl) {
+function showVideo(e, videoUrl) {
     e.preventDefault(); 
     e.stopPropagation();
 
-    const urlParts = vimeoUrl.split('/');
-    const videoId = urlParts.pop() || urlParts.pop();
-    
-    const embedUrl = `https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0`;
-    
-    $('#lightboxVideoPlayer').attr('src', embedUrl);
-    $('#videoLightbox').addClass('active');
+    let embedUrl = '';
+
+    // 1. Check if the URL is from YouTube
+    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+        // Assume the URL is already in the correct /embed/ format from the HTML fix.
+        // We just need to ensure autoplay is added.
+        embedUrl = `${videoUrl.split('?')[0]}?autoplay=1`;
+    } 
+    // 2. Otherwise, treat it as a Vimeo URL (your original logic)
+    else if (videoUrl.includes('vimeo.com')) {
+        const urlParts = videoUrl.split('/');
+        const videoId = urlParts.pop() || urlParts.pop();
+        // Construct the Vimeo embed URL
+        embedUrl = `https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0`;
+    }
+
+    if (embedUrl) {
+        // Set the calculated embed URL and show the lightbox
+        $('#lightboxVideoPlayer').attr('src', embedUrl);
+        $('#videoLightbox').addClass('active');
+    }
 }
 
 function hideVideo() {
     $('#videoLightbox').removeClass('active');
+    // Stop the video from playing when closing the lightbox
     $('#lightboxVideoPlayer').attr('src', '');
 }
 
